@@ -1,11 +1,367 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Orbital Brilliance</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>White Paper: Thunderdome Bio-Encoding Initiative</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .header-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .paper-shadow { box-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06); }
+        @media print {
+            #gate { display: none !important; }
+            .no-print { display: none; }
+            body { background: white; }
+            .paper-shadow { box-shadow: none; }
+        }
+
+        /* Gate */
+        #gate {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at 50% 40%, #0f172a 0%, #020617 100%);
+        }
+        #gate.hidden { display: none; }
+
+        .gate-card {
+            width: 100%;
+            max-width: 420px;
+            margin: 1.5rem;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            border-radius: 1rem;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 0 60px rgba(99, 179, 237, 0.08), 0 25px 50px rgba(0,0,0,0.6);
+            backdrop-filter: blur(18px);
+        }
+
+        .gate-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            margin-bottom: 2rem;
+        }
+        .gate-logo-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gate-logo-icon svg { width: 18px; height: 18px; fill: white; }
+        .gate-logo-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #e2e8f0;
+        }
+
+        .gate-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.4rem;
+            line-height: 1.3;
+        }
+        .gate-sub {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+            letter-spacing: 0.02em;
+        }
+
+        .gate-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        #gate-input {
+            width: 100%;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: #e2e8f0;
+            font-size: 1rem;
+            letter-spacing: 0.08em;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        #gate-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        #gate-input.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+            animation: shake 0.35s ease;
+        }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20%      { transform: translateX(-6px); }
+            40%      { transform: translateX(6px); }
+            60%      { transform: translateX(-4px); }
+            80%      { transform: translateX(4px); }
+        }
+
+        #gate-error {
+            font-size: 0.78rem;
+            color: #f87171;
+            margin-top: 0.5rem;
+            min-height: 1.1rem;
+            display: block;
+        }
+
+        #gate-btn {
+            margin-top: 1.5rem;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #2563eb, #0ea5e9);
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            letter-spacing: 0.06em;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+        #gate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        #gate-btn:active { transform: translateY(0); }
+
+        .gate-footer {
+            margin-top: 2rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(100,116,139,0.15);
+            font-size: 0.72rem;
+            color: #475569;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* Subtle animated rings behind the card */
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(59,130,246,0.06);
+            animation: pulse-ring 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .ring:nth-child(1) { width: 500px; height: 500px; top: calc(50% - 250px); left: calc(50% - 250px); animation-delay: 0s; }
+        .ring:nth-child(2) { width: 700px; height: 700px; top: calc(50% - 350px); left: calc(50% - 350px); animation-delay: 2s; }
+        .ring:nth-child(3) { width: 900px; height: 900px; top: calc(50% - 450px); left: calc(50% - 450px); animation-delay: 4s; }
+        @keyframes pulse-ring {
+            0%,100% { opacity: 0.4; transform: scale(1); }
+            50%      { opacity: 0.1; transform: scale(1.04); }
+        }
+    </style>
 </head>
-<body>
-  <p>Coming soon.</p>
+<body class="bg-slate-100 min-h-screen">
+
+    <!-- ─── ENTRY GATE ─── -->
+    <div id="gate" role="dialog" aria-modal="true" aria-label="Access gate">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="gate-card">
+            <div class="gate-logo">
+                <div class="gate-logo-icon">
+                    <!-- orbit/signal icon -->
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 2a8 8 0 110 16A8 8 0 0112 4zm0 3a5 5 0 100 10A5 5 0 0012 7zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
+                    </svg>
+                </div>
+                <span class="gate-logo-text">Orbital Brilliance</span>
+            </div>
+
+            <div class="gate-title">Restricted Document Access</div>
+            <div class="gate-sub">Project Thunderdome — Controlled Distribution</div>
+
+            <label class="gate-label" for="gate-input">Access Code</label>
+            <input
+                id="gate-input"
+                type="password"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="Enter access code"
+            />
+            <span id="gate-error"></span>
+
+            <button id="gate-btn" onclick="checkCode()">Unlock Document</button>
+
+            <div class="gate-footer">
+                This document contains proprietary and confidential information.<br>
+                Unauthorized access or distribution is strictly prohibited.
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── WHITE PAPER ─── -->
+    <div id="content" style="display:none;">
+
+        <header class="header-gradient text-white p-8 no-print">
+            <div class="max-w-4xl mx-auto">
+                <p class="text-blue-400 font-semibold tracking-widest text-sm uppercase mb-2">Strategic White Paper | Proposal</p>
+                <h1 class="text-3xl md:text-4xl font-bold font-['Playfair_Display']">Project Thunderdome: Advanced Bio-Encoding &amp; Behavioral Informatics</h1>
+                <p class="text-slate-400 mt-2">A Proposed Strategic Initiative for Dual-Use Biological Digitization</p>
+            </div>
+        </header>
+
+        <main class="bg-white max-w-4xl mx-auto my-8 p-8 md:p-16 paper-shadow">
+
+            <section id="executive-summary">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4">Executive Summary</h2>
+                <p class="mb-4">
+                    The modern landscape of biological research and biodefense is constrained by an "observation gap." While genomics has progressed, the high-fidelity modeling of biological movement, chemotaxis, and environmental interaction remains largely qualitative.
+                </p>
+                <p>
+                    <strong>The Thunderdome Initiative</strong> is a proposed high-speed, volumetric HDR light-field platform designed to transform biological activity into quantifiable, multi-modal data. By encoding the behavioral dynamics of micro-fauna and near-fungal entities, this initiative seeks to provide critical infrastructure for bio-inspired autonomous robotics and the rigorous classification of anomalous biological threats.
+                </p>
+            </section>
+
+            <hr class="h-px bg-slate-200 my-8 border-0">
+
+            <section id="platform-architecture">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4">The Thunderdome Hardware Architecture</h2>
+                <p class="mb-6">
+                    The Thunderdome hardware stack is designed to bridge the gap between microscopic observation and actionable data.
+                </p>
+
+                <figure class="my-8">
+                    <img src="watermarked_img_15478495365358445660.png" alt="Thunderdome Hardware Prototype v2.4" class="w-full rounded-xl shadow-lg border border-slate-200">
+                    <figcaption class="text-sm text-slate-500 mt-3 text-center italic">Figure 1: Conceptual rendering of the Thunderdome Hardware Prototype v2.4.</figcaption>
+                </figure>
+
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <h4 class="font-semibold text-slate-900">Volumetric Light-Field Sensing</h4>
+                        <p class="text-sm text-slate-600 mt-1">Enables 3D reconstruction of movement paths without the need for fluorescent markers, preserving the natural state of the specimen.</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <h4 class="font-semibold text-slate-900">Multi-Modal Sensor Fusion</h4>
+                        <p class="text-sm text-slate-600 mt-1">Synchronized capture of motility, photoluminescence, and electromagnetic signatures in a controlled environmental stage.</p>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="h-px bg-slate-200 my-8 border-0">
+
+            <section id="strategic-value">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4">Strategic Dual-Use Applications</h2>
+                <p class="mb-4">The initiative is designed to provide high-value data for two primary, dual-use sectors:</p>
+
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">1. Bio-Inspired Autonomous Systems</h3>
+                <p class="mb-4">
+                    The trajectory and swarm-behavior data derived from Thunderdome acts as a foundational training set for micro-robotic drones. By mapping the efficiency of biological evasion and navigation, we provide reinforcement learning (RL) agents with the "ground truth" required to excel in resource-constrained environments.
+                </p>
+
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">2. Biodefense &amp; Anomalous Characterization</h3>
+                <p class="mb-4">
+                    The platform provides an empirical, objective baseline for identifying anomalous pathogens. By comparing unknown biological samples against our verified library of "known" taxonomies, we can categorize anomalous behavior with quantifiable precision.
+                </p>
+            </section>
+
+            <hr class="h-px bg-slate-200 my-8 border-0">
+
+            <section id="roadmap">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4">Proposed Operational Roadmap</h2>
+                <p class="mb-4">The initiative is planned to follow a three-phase deployment trajectory:</p>
+                <ol class="list-decimal pl-6 space-y-3 mt-4 text-slate-700">
+                    <li><strong>Months 0–3 (Formation):</strong> Formalization of non-profit entity for ethical oversight and initial IP filings. Prototype refinement and benchmark definition.</li>
+                    <li><strong>Months 3–12 (Benchmarking):</strong> Validation of platform fidelity against <em>Drosophila melanogaster</em> and standard environmental micro-organisms to establish empirical performance standards.</li>
+                    <li><strong>Months 12–24 (Scaling):</strong> Potential formation of a Delaware Public Benefit Corporation (PBC) to manage commercial scaling, government contracting, and deployment of modular units to partner labs.</li>
+                </ol>
+            </section>
+
+            <hr class="h-px bg-slate-200 my-8 border-0">
+
+            <section id="governance">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4">Proposed Governance Framework</h2>
+                <p class="mb-4">
+                    To maximize public trust and operational efficiency, we propose a dual-entity governance model to be established as the initiative matures:
+                </p>
+                <div class="space-y-4">
+                    <div class="border-l-4 border-blue-500 pl-4 py-2">
+                        <h4 class="font-bold text-slate-900">The Foundation (Proposed Non-Profit)</h4>
+                        <p class="text-slate-600">Dedicated to ethics, patient-advocacy integration, and fostering open-science collaboration for public-interest research.</p>
+                    </div>
+                    <div class="border-l-4 border-emerald-500 pl-4 py-2">
+                        <h4 class="font-bold text-slate-900">The Enterprise (Proposed Delaware PBC)</h4>
+                        <p class="text-slate-600">Intended to serve as the primary contracting engine for government solicitations, high-end hardware production, and proprietary data-licensing agreements.</p>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="mt-12 text-center text-sm text-slate-500 no-print">
+                <p>&copy; 2026 Orbital Brilliance Initiative (Proposed). All Rights Reserved.</p>
+                <button onclick="window.print()" class="mt-4 bg-slate-800 hover:bg-slate-900 text-white px-6 py-2 rounded shadow-md transition-colors">
+                    Print / Export Report
+                </button>
+            </footer>
+        </main>
+
+    </div><!-- /content -->
+
+    <script>
+        (function () {
+            const SESSION_KEY = 'ob_unlocked';
+
+            // Already unlocked this session?
+            if (sessionStorage.getItem(SESSION_KEY) === '1') {
+                unlock();
+            }
+
+            // Allow Enter key in the input
+            document.getElementById('gate-input').addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') checkCode();
+            });
+
+            // Auto-focus the input
+            window.addEventListener('load', function () {
+                var gate = document.getElementById('gate');
+                if (!gate.classList.contains('hidden')) {
+                    document.getElementById('gate-input').focus();
+                }
+            });
+        }());
+
+        function checkCode() {
+            var input = document.getElementById('gate-input');
+            var error = document.getElementById('gate-error');
+            var val   = input.value.trim();
+
+            if (val === 'DaveTV') {
+                sessionStorage.setItem('ob_unlocked', '1');
+                unlock();
+            } else {
+                input.classList.remove('error');
+                // Force reflow so the animation re-triggers on repeated bad entries
+                void input.offsetWidth;
+                input.classList.add('error');
+                error.textContent = 'Incorrect access code. Please try again.';
+                input.select();
+            }
+        }
+
+        function unlock() {
+            document.getElementById('gate').classList.add('hidden');
+            document.getElementById('content').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
