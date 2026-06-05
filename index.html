@@ -43,26 +43,22 @@
 
         .gate-logo {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 0.625rem;
+            gap: 0.75rem;
             margin-bottom: 2rem;
         }
-        .gate-logo-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #0ea5e9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .gate-logo img {
+            width: 100px;
+            height: auto;
+            filter: drop-shadow(0 0 18px rgba(14, 165, 233, 0.35));
         }
-        .gate-logo-icon svg { width: 18px; height: 18px; fill: white; }
         .gate-logo-text {
-            font-size: 0.9rem;
+            font-size: 0.78rem;
             font-weight: 700;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.18em;
             text-transform: uppercase;
-            color: #e2e8f0;
+            color: #94a3b8;
         }
 
         .gate-title {
@@ -180,13 +176,8 @@
         <div class="ring"></div>
         <div class="gate-card">
             <div class="gate-logo">
-                <div class="gate-logo-icon">
-                    <!-- orbit/signal icon -->
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 2a8 8 0 110 16A8 8 0 0112 4zm0 3a5 5 0 100 10A5 5 0 0012 7zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
-                    </svg>
-                </div>
-                <span class="gate-logo-text">Orbital Brilliance</span>
+                <img src="logo.png" alt="Orbital Brilliance Foundation">
+                <span class="gate-logo-text">Orbital Brilliance Foundation</span>
             </div>
 
             <div class="gate-title">Restricted Document Access</div>
@@ -215,10 +206,13 @@
     <div id="content" style="display:none;">
 
         <header class="header-gradient text-white p-8 no-print">
-            <div class="max-w-4xl mx-auto">
-                <p class="text-blue-400 font-semibold tracking-widest text-sm uppercase mb-2">Strategic White Paper | Proposal</p>
-                <h1 class="text-3xl md:text-4xl font-bold font-['Playfair_Display']">Project Thunderdome: Advanced Bio-Encoding &amp; Behavioral Informatics</h1>
-                <p class="text-slate-400 mt-2">A Proposed Strategic Initiative for Dual-Use Biological Digitization</p>
+            <div class="max-w-4xl mx-auto flex items-center gap-6">
+                <img src="logo.png" alt="Orbital Brilliance Foundation" style="width:72px;height:auto;flex-shrink:0;filter:drop-shadow(0 0 12px rgba(14,165,233,0.3));">
+                <div>
+                    <p class="text-blue-400 font-semibold tracking-widest text-sm uppercase mb-2">Strategic White Paper | Proposal</p>
+                    <h1 class="text-3xl md:text-4xl font-bold font-['Playfair_Display']">Project Thunderdome: Advanced Bio-Encoding &amp; Behavioral Informatics</h1>
+                    <p class="text-slate-400 mt-2">A Proposed Strategic Initiative for Dual-Use Biological Digitization</p>
+                </div>
             </div>
         </header>
 
